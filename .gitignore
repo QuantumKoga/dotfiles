@@ -1,0 +1,19 @@
+# Ignore everything in .config
+/*
+
+# Keep .gitignore
+!/.gitignore
+
+# Keep selected directories
+!/hypr/
+!/quickshell/
+!/matugen/
+!/cava/
+!/alacritty/
+
+# Track their contents
+!/hypr/**
+!/quickshell/**
+!/matugen/**
+!/cava/**
+!/alacritty/
