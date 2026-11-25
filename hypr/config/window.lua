@@ -47,6 +47,7 @@ for _, t in ipairs(video_titles) do
 end
 
 
+
 -- dropdown terminals
 
 local dropdowns = {
@@ -74,20 +75,24 @@ local dropdowns = {
         key = "ALT + S",
         cmd = "signal-desktop",
     },
+
     discord = {
         key = "ALT + D",
         cmd = "discord",
     },
+
     btop = {
         key = "ALT + Y",
         cmd = "alacritty -e btop",
     },
+
     nvtop = {
         key = "ALT + N",
         cmd = "alacritty -e nvtop",
     },
 }
 
+-- dropdown window rules and keybinds
 for name, cfg in pairs(dropdowns) do
     hl.window_rule({
         match = { class = "dropdown-" .. name },
@@ -100,13 +105,25 @@ for name, cfg in pairs(dropdowns) do
         }
     })
 
-    hl.workspace_rule({
-        workspace = "special:" .. name,
-        on_created_empty = cfg.cmd
-    })
-
     hl.bind(
         cfg.key,
         hl.dsp.workspace.toggle_special(name)
     )
 end
+
+-- launch applications when an empty special workspace is created
+hl.on("workspace.created", function(workspace)
+    if not workspace.is_empty then
+        return
+    end
+
+    local name = workspace.name:gsub("^special:", "")
+    local cfg = dropdowns[name]
+
+    if not cfg then
+        return
+    end
+
+    hl.exec_cmd(cfg.cmd)
+end)
+
